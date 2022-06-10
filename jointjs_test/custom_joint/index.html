@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="node_modules/jointjs/dist/joint.css" />
+</head>
+<body>
+    <!-- content -->
+    <div id="myholder"></div>
+
+    <!-- dependencies -->
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/lodash/lodash.js"></script>
+    <script src="node_modules/backbone/backbone.js"></script>
+    <script src="node_modules/jointjs/dist/joint.js"></script>
+
+    <!-- code -->
+    <script type="text/javascript">
+
+        var namespace = joint.shapes;
+
+        var graph = new joint.dia.Graph({}, { cellNamespace: namespace });
+
+        var paper = new joint.dia.Paper({
+            el: document.getElementById('myholder'),
+            model: graph,
+            width: 10000,
+            height: 10000,
+            async: true,
+            gridSize: 1,
+            cellViewNamespace: namespace
+        });
+
+        // const port = {
+        //   group: 'a',
+        //   args: {},
+        //   attrs: {
+        //     body: {
+        //       magnet: true,
+        //       width: 16, 
+        //       height: 16,
+        //       // x:-8,
+        //       // y: -4,
+        //       stroke: 'red',
+        //       fill: 'gray'
+        //     }
+        //   }
+        // }
+
+        for (i=0; i< 2000; i++){
+          var rect = new joint.shapes.standard.Rectangle({
+            position: { x: 0, y: i*3},
+            size: {width: 100, height: 40},
+            attrs: { 
+              body: {
+                  fill: 'blue'
+              },
+              label: {
+                  text: 'Hello',
+                  fill: 'white'
+              },
+              text: { text: 'standard.Rectangle', magnet: true }
+            }
+          });
+          rect.addTo(graph);
+        }
+
+    </script>
+</body>
+</html>

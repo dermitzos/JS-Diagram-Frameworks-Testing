@@ -1,0 +1,16 @@
+{
+  "name": "jsplumb_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@jsplumb/browser-ui": "^5.7.1",
+    "@jsplumb/core": "^5.7.1",
+    "@jsplumb/util": "^5.7.1"
+  }
+}

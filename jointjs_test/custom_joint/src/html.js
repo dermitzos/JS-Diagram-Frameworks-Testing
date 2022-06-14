@@ -1,6 +1,6 @@
 (function(joint, V) {
 
-    var noElements = 100;
+    var noElements = 2000;
     var elementsPerRow = 200;
     const elementDistance = 30;
     $('#elementNumber').val(noElements);

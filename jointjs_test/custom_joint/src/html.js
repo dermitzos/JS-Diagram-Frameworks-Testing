@@ -1,5 +1,10 @@
 (function(joint, V) {
 
+    var noElements = 100;
+    var elementsPerRow = 200;
+    const elementDistance = 30;
+    $('#elementNumber').val(noElements);
+    $('#elPerRow').val(elementsPerRow);
     // Notes:
     // - Currently, there is no support for z-indexes on HTML Elements
     // - It's not possible to export the diagram into PNG/SVG on the client-side
@@ -8,8 +13,8 @@
     var graph = new joint.dia.Graph;
     var paper = new joint.dia.Paper({
         el: document.getElementById('paper'),
-        width: 1900,
-        height: 900,
+        width: elementsPerRow * (250+elementDistance),
+        height: noElements/elementsPerRow * (228+elementDistance) + 200,
         model: graph,
         async: true,
         frozen: true,
@@ -65,55 +70,62 @@
             state: 'at-risk'
         }
     });
-    cells = [el1];
-    links = [];
-    for (let i = 1; i<2000; i++){
-        let el = new joint.shapes.html.Element({
-            position: { x: (i%220)*282, y: Math.floor(i/220) * 280},
-            fields: {
-                name: 'Create Story',
-                resource: 'bob',
-                state: 'done'
-            }   
-        })
-        cells.push(el);
+    function createCells() {
+        paper.freeze()
+        cells = [el1];
+        links = [];
+        for (let i = 1; i<noElements; i++){
+            let el = new joint.shapes.html.Element({
+                position: { x: (i%elementsPerRow)* (250 + elementDistance), y: Math.floor(i/elementsPerRow) * (228+elementDistance)},
+                fields: {
+                    name: 'Create Story',
+                    resource: 'bob',
+                    state: 'done'
+                }   
+            })
+            cells.push(el);
 
-        let li = new joint.shapes.standard.Link({
-            source: { id: cells[i-1].id },
-            target: { id: cells[i].id },
+            let li = new joint.shapes.standard.Link({
+                source: { id: cells[i-1].id },
+                target: { id: cells[i].id },
+                attrs: {
+                    line: {
+                        stroke: '#464554'
+                    }
+                }
+            });
+            links.push(li);
+        }
+
+        var l1 = new joint.shapes.standard.Link({
+            source: { id: el1.id },
+            target: { id: el2.id },
             attrs: {
                 line: {
                     stroke: '#464554'
                 }
             }
         });
-        links.push(li);
+
+        var l2 = new joint.shapes.standard.Link({
+            source: { id: el2.id },
+            target: { id: el3.id },
+            attrs: {
+                line: {
+                    stroke: '#464554'
+                }
+            }
+        });
+
+        graph.resetCells([...cells, ...links]);
+
+        paper.unfreeze();
     }
+    createCells();
 
-    var l1 = new joint.shapes.standard.Link({
-        source: { id: el1.id },
-        target: { id: el2.id },
-        attrs: {
-            line: {
-                stroke: '#464554'
-            }
-        }
-    });
-
-    var l2 = new joint.shapes.standard.Link({
-        source: { id: el2.id },
-        target: { id: el3.id },
-        attrs: {
-            line: {
-                stroke: '#464554'
-            }
-        }
-    });
-
-    graph.resetCells([...cells, ...links]);
-
-    paper.unfreeze();
-
+    function resizePaper() {
+        paper.setDimensions(elementsPerRow * (250+elementDistance), noElements/elementsPerRow * (228+elementDistance) + 200)
+    }
     // Toolbar
     var zoomLevel = 1;
 
@@ -132,11 +144,9 @@
     });
 
     document.getElementById('reset').addEventListener('click', function() {
-        graph.getElements().forEach(function(element) {
-            element.prop(['fields', 'name'], '');
-            element.prop(['fields', 'resource'], '');
-            element.prop(['fields', 'state'], '');
-        });
+        noElements = $('#elementNumber').val();
+        elementsPerRow = $('#elPerRow').val();
+        createCells();
+        resizePaper();
     });
-
 })(joint, V);

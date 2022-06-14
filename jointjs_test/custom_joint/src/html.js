@@ -1,7 +1,7 @@
 (function(joint, V) {
 
-    var noElements = 2000;
-    var elementsPerRow = 200;
+    var noElements = 100;
+    var elementsPerRow = 20;
     const elementDistance = 30;
     $('#elementNumber').val(noElements);
     $('#elPerRow').val(elementsPerRow);
@@ -70,6 +70,66 @@
             state: 'at-risk'
         }
     });
+    var portIn = {
+        position: {
+            name: 'left'
+        },
+        attrs: {
+            portBody: {
+                magnet: true,
+                width: 16,
+                height: 16,
+                x: -8,
+                y: -8,
+                fill: '#000000'
+            }
+        },
+        label: {
+            position: {
+                name: 'left',
+                args: { y:6}
+            },
+            markup: [{
+                tagName: 'text',
+                selector: 'label',
+                className: 'label-text'
+            }],
+        },
+        markup: [{
+            tagName: 'rect',
+            selector: 'portBody'
+        }]
+    }
+    var portOut = {
+        position: {
+            name: 'right'
+        },
+        attrs: {
+            portBody: {
+                magnet: true,
+                width: 16,
+                height: 16,
+                x: -8,
+                y: -8,
+                fill: '#000000'
+            }
+        },
+        label: {
+            position: {
+                name: 'right',
+                args: { y:6}
+            },
+            markup: [{
+                tagName: 'text',
+                selector: 'label',
+                className: 'label-text'
+            }],
+        },
+        markup: [{
+            tagName: 'rect',
+            selector: 'portBody'
+        }]
+    }
     function createCells() {
         paper.freeze()
         cells = [el1];
@@ -81,7 +141,10 @@
                     name: 'Create Story',
                     resource: 'bob',
                     state: 'done'
-                }   
+                },
+                ports: {
+                    items: [portIn, portOut]
+                }
             })
             cells.push(el);
 
@@ -96,26 +159,6 @@
             });
             links.push(li);
         }
-
-        var l1 = new joint.shapes.standard.Link({
-            source: { id: el1.id },
-            target: { id: el2.id },
-            attrs: {
-                line: {
-                    stroke: '#464554'
-                }
-            }
-        });
-
-        var l2 = new joint.shapes.standard.Link({
-            source: { id: el2.id },
-            target: { id: el3.id },
-            attrs: {
-                line: {
-                    stroke: '#464554'
-                }
-            }
-        });
 
         graph.resetCells([...cells, ...links]);
 
